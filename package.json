@@ -10,6 +10,7 @@
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.21.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
@@ -22,9 +23,9 @@
   },
   "scripts": {
     "start": "rm -rf tsconfig.json && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "rm -rf tsconfig.json && react-scripts build",
+    "test": "rm -rf tsconfig.json && react-scripts test",
+    "eject": "rm -rf tsconfig.json && react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -45,6 +46,9 @@
     ]
   },
   "devDependencies": {
-    "@types/react-redux": "^7.1.16"
+    "@types/enzyme": "^3.10.8",
+    "@types/react-redux": "^7.1.16",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.4.1",
+    "enzyme": "^3.11.0"
   }
 }

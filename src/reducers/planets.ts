@@ -1,8 +1,7 @@
-import { boolean } from 'yargs';
-import { IPlanet, TNullable } from '../types';
+import { IPlanet, TNullable, TPlanets } from '../types';
 
 interface IState {
-  planets: IPlanet[];
+  planets: TPlanets;
   isFetching: boolean;
   errorMessage: TNullable<string>;
 }
@@ -14,7 +13,7 @@ interface IPayload {
 }
 
 const initialState: IState = {
-  planets: [],
+  planets: new Map(),
   isFetching: false,
   errorMessage: null,
 };
