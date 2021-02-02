@@ -1,2 +1,2 @@
-export * from './planet';
+export * from './galaxy';
 export * from './common';

@@ -1,20 +1,30 @@
 import { http } from '../compositions';
-import { IPlanet, TDispatch } from '../types';
+import { IPlanet, TDispatch, TNullable } from '../types';
+import { BASE_URL } from '../config.json';
 
 export const receivePlanets = () => ({
   type: 'RECEIVE_PLANETS',
 });
 
-export const receivePlanetsSuccess = (planets: IPlanet[]) => ({
+export const receivePlanetsSuccess = (
+  planets: IPlanet[],
+  total: number,
+  next: string
+) => ({
   type: 'RECEIVE_PLANETS_SUCCESS',
   planets,
+  total,
+  next,
 });
 
-export const getPlanetsAction = (page: number = 1) => (
-  dispatch: TDispatch<IPlanet[]>
+export const getPlanetsAction = (nextPage: TNullable<string> = null) => (
+  dispatch: TDispatch<IPlanet[] | number>
 ) => {
   dispatch(receivePlanets());
-  http.get(`planets?page=${page}`).then(({ data }) => {
-    dispatch(receivePlanetsSuccess(data));
-  });
+
+  return http
+    .get(nextPage ? nextPage.replace(BASE_URL, '') : `/planets`)
+    .then(({ data: { results, next, count } }) => {
+      dispatch(receivePlanetsSuccess(results, count, next));
+    });
 };

@@ -1,0 +1,18 @@
+.grid-footer {
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.grid-footer .breadcrumb {
+  justify-content: center;
+}
+
+.grid-footer .breadcrumb a {
+  cursor: pointer;
+}
+
+.grid-cell a {
+  white-space: nowrap;
+}

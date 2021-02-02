@@ -1,235 +1,96 @@
-// import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-import './Planets.css';
+import { Grid } from '../../components';
+import { useCallback, useEffect, useMemo } from 'react';
+import { IPlanet, TNullable } from '../../types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPlanetsAction } from '../../actions';
+import { getIdFromLink } from '../../compositions';
 
-// import { http } from '../../compositions';
+const HEADER = [
+  'name',
+  'rotation_period',
+  'orbital_period',
+  'diameter',
+  'climate',
+  'gravity',
+  'terrain',
+  'surface_water',
+  'population',
+];
 
-// import Grid from '../Grid';
-// import { useEffect, useState } from 'react';
-// import { IPlanet } from '../../types';
-// import { AxiosResponse } from 'axios';
+interface IState {
+  planets: {
+    next: TNullable<string>;
+    isFetching: boolean;
+    planets: IPlanet[];
+  };
+}
 
-function Planets() {
-  // const { planets } = useSelector((state) => state.planets);
-  console.log('???');
-  // const data = {
-  //   header: [
-  //     'name',
-  //     'rotation_period',
-  //     'orbital_period',
-  //     'diameter',
-  //     'climate',
-  //     'gravity',
-  //     'terrain',
-  //     'surface_water',
-  //     'population',
-  //   ],
-  //   values: [
-  //     {
-  //       name: 'Tatooine',
-  //       rotation_period: '23',
-  //       orbital_period: '304',
-  //       diameter: '10465',
-  //       climate: 'arid',
-  //       gravity: '1 standard',
-  //       terrain: 'desert',
-  //       surface_water: '1',
-  //       population: '200000',
-  //       residents: [
-  //         'http://swapi.dev/api/people/1/',
-  //         'http://swapi.dev/api/people/2/',
-  //         'http://swapi.dev/api/people/4/',
-  //         'http://swapi.dev/api/people/6/',
-  //         'http://swapi.dev/api/people/7/',
-  //         'http://swapi.dev/api/people/8/',
-  //         'http://swapi.dev/api/people/9/',
-  //         'http://swapi.dev/api/people/11/',
-  //         'http://swapi.dev/api/people/43/',
-  //         'http://swapi.dev/api/people/62/',
-  //       ],
-  //       films: [
-  //         'http://swapi.dev/api/films/1/',
-  //         'http://swapi.dev/api/films/3/',
-  //         'http://swapi.dev/api/films/4/',
-  //         'http://swapi.dev/api/films/5/',
-  //         'http://swapi.dev/api/films/6/',
-  //       ],
-  //       created: '2014-12-09T13:50:49.641000Z',
-  //       edited: '2014-12-20T20:58:18.411000Z',
-  //       url: 'http://swapi.dev/api/planets/1/',
-  //     },
-  //     {
-  //       name: 'Alderaan',
-  //       rotation_period: '24',
-  //       orbital_period: '364',
-  //       diameter: '12500',
-  //       climate: 'temperate',
-  //       gravity: '1 standard',
-  //       terrain: 'grasslands, mountains',
-  //       surface_water: '40',
-  //       population: '2000000000',
-  //       residents: [
-  //         'http://swapi.dev/api/people/5/',
-  //         'http://swapi.dev/api/people/68/',
-  //         'http://swapi.dev/api/people/81/',
-  //       ],
-  //       films: [
-  //         'http://swapi.dev/api/films/1/',
-  //         'http://swapi.dev/api/films/6/',
-  //       ],
-  //       created: '2014-12-10T11:35:48.479000Z',
-  //       edited: '2014-12-20T20:58:18.420000Z',
-  //       url: 'http://swapi.dev/api/planets/2/',
-  //     },
-  //     {
-  //       name: 'Yavin IV',
-  //       rotation_period: '24',
-  //       orbital_period: '4818',
-  //       diameter: '10200',
-  //       climate: 'temperate, tropical',
-  //       gravity: '1 standard',
-  //       terrain: 'jungle, rainforests',
-  //       surface_water: '8',
-  //       population: '1000',
-  //       residents: [],
-  //       films: ['http://swapi.dev/api/films/1/'],
-  //       created: '2014-12-10T11:37:19.144000Z',
-  //       edited: '2014-12-20T20:58:18.421000Z',
-  //       url: 'http://swapi.dev/api/planets/3/',
-  //     },
-  //     {
-  //       name: 'Hoth',
-  //       rotation_period: '23',
-  //       orbital_period: '549',
-  //       diameter: '7200',
-  //       climate: 'frozen',
-  //       gravity: '1.1 standard',
-  //       terrain: 'tundra, ice caves, mountain ranges',
-  //       surface_water: '100',
-  //       population: 'unknown',
-  //       residents: [],
-  //       films: ['http://swapi.dev/api/films/2/'],
-  //       created: '2014-12-10T11:39:13.934000Z',
-  //       edited: '2014-12-20T20:58:18.423000Z',
-  //       url: 'http://swapi.dev/api/planets/4/',
-  //     },
-  //     {
-  //       name: 'Dagobah',
-  //       rotation_period: '23',
-  //       orbital_period: '341',
-  //       diameter: '8900',
-  //       climate: 'murky',
-  //       gravity: 'N/A',
-  //       terrain: 'swamp, jungles',
-  //       surface_water: '8',
-  //       population: 'unknown',
-  //       residents: [],
-  //       films: [
-  //         'http://swapi.dev/api/films/2/',
-  //         'http://swapi.dev/api/films/3/',
-  //         'http://swapi.dev/api/films/6/',
-  //       ],
-  //       created: '2014-12-10T11:42:22.590000Z',
-  //       edited: '2014-12-20T20:58:18.425000Z',
-  //       url: 'http://swapi.dev/api/planets/5/',
-  //     },
-  //     {
-  //       name: 'Bespin',
-  //       rotation_period: '12',
-  //       orbital_period: '5110',
-  //       diameter: '118000',
-  //       climate: 'temperate',
-  //       gravity: '1.5 (surface), 1 standard (Cloud City)',
-  //       terrain: 'gas giant',
-  //       surface_water: '0',
-  //       population: '6000000',
-  //       residents: ['http://swapi.dev/api/people/26/'],
-  //       films: ['http://swapi.dev/api/films/2/'],
-  //       created: '2014-12-10T11:43:55.240000Z',
-  //       edited: '2014-12-20T20:58:18.427000Z',
-  //       url: 'http://swapi.dev/api/planets/6/',
-  //     },
-  //     {
-  //       name: 'Endor',
-  //       rotation_period: '18',
-  //       orbital_period: '402',
-  //       diameter: '4900',
-  //       climate: 'temperate',
-  //       gravity: '0.85 standard',
-  //       terrain: 'forests, mountains, lakes',
-  //       surface_water: '8',
-  //       population: '30000000',
-  //       residents: ['http://swapi.dev/api/people/30/'],
-  //       films: ['http://swapi.dev/api/films/3/'],
-  //       created: '2014-12-10T11:50:29.349000Z',
-  //       edited: '2014-12-20T20:58:18.429000Z',
-  //       url: 'http://swapi.dev/api/planets/7/',
-  //     },
-  //     {
-  //       name: 'Naboo',
-  //       rotation_period: '26',
-  //       orbital_period: '312',
-  //       diameter: '12120',
-  //       climate: 'temperate',
-  //       gravity: '1 standard',
-  //       terrain: 'grassy hills, swamps, forests, mountains',
-  //       surface_water: '12',
-  //       population: '4500000000',
-  //       residents: [
-  //         'http://swapi.dev/api/people/3/',
-  //         'http://swapi.dev/api/people/21/',
-  //         'http://swapi.dev/api/people/35/',
-  //         'http://swapi.dev/api/people/36/',
-  //         'http://swapi.dev/api/people/37/',
-  //         'http://swapi.dev/api/people/38/',
-  //         'http://swapi.dev/api/people/39/',
-  //         'http://swapi.dev/api/people/42/',
-  //         'http://swapi.dev/api/people/60/',
-  //         'http://swapi.dev/api/people/61/',
-  //         'http://swapi.dev/api/people/66/',
-  //       ],
-  //       films: [
-  //         'http://swapi.dev/api/films/3/',
-  //         'http://swapi.dev/api/films/4/',
-  //         'http://swapi.dev/api/films/5/',
-  //         'http://swapi.dev/api/films/6/',
-  //       ],
-  //       created: '2014-12-10T11:52:31.066000Z',
-  //       edited: '2014-12-20T20:58:18.430000Z',
-  //       url: 'http://swapi.dev/api/planets/8/',
-  //     },
-  //   ],
-  //   actions: [
-  //     {
-  //       label: 'Go to Films',
-  //       action: (row: any) => {
-  //         console.log(`redirect to grid with ${row.films.length} Films`);
-  //       },
-  //     },
-  //     {
-  //       label: 'Go to Residents',
-  //       action: (row: any) => {
-  //         console.log(
-  //           `redirect to grid with ${row.residents.length} Residents`
-  //         );
-  //       },
-  //     },
-  //   ],
-  // };
+export default function Planets() {
+  const dispatch = useDispatch();
+  const { next, planets, isFetching } = useSelector(
+    (state: IState) => state.planets
+  );
 
-  // useEffect(() => {
-  //   http.get('/planets').then((result: AxiosResponse<IPlanet[]>) => {
-  //     console.log(result);
-  //     setPlanets([]);
-  //   });
-  // }, []);
+  const getPlanets = useCallback(() => {
+    dispatch(getPlanetsAction(next));
+  }, [dispatch, next]);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!planets.length) {
+      getPlanets();
+    }
+  }, [planets, dispatch, getPlanets]);
+
+  const footerProps = useMemo(
+    () => ({
+      isFetching,
+      label: 'Load more',
+      action: getPlanets,
+    }),
+    [getPlanets, isFetching]
+  );
+
+  const goTo = useCallback(
+    (pathname: string, links: string[]) => {
+      const ids = links.map(getIdFromLink).filter(Boolean);
+      history.push({
+        pathname,
+        search: `?ids=${encodeURIComponent(JSON.stringify(ids))}`,
+      });
+    },
+    [history]
+  );
+
+  const ACTIONS = useMemo(
+    () => [
+      {
+        label: 'Go to Films',
+        action: ({ films }: IPlanet) => {
+          goTo('/films', films);
+        },
+      },
+      {
+        label: 'Go to Residents',
+        action: ({ residents }: IPlanet) => {
+          goTo('/residents', residents);
+        },
+      },
+    ],
+    [goTo]
+  );
 
   return (
     <div className="App">
-      <div>ttt</div>
-      {/* <Grid data={data} /> */}
+      <Grid<IPlanet>
+        header={HEADER}
+        values={planets}
+        actions={ACTIONS}
+        footer={next !== null ? footerProps : null}
+      />
     </div>
   );
 }
-
-export default Planets;

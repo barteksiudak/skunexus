@@ -1,24 +1,32 @@
-import { IPlanet, TNullable, TPlanets } from '../types';
+import { IPlanet, TNullable } from '../types';
 
 interface IState {
-  planets: TPlanets;
+  total: TNullable<number>;
+  planets: IPlanet[];
+  next: TNullable<string>;
+  pageSize: TNullable<number>;
   isFetching: boolean;
   errorMessage: TNullable<string>;
 }
 
 interface IPayload {
   type: string;
+  total: number;
+  next: TNullable<string>;
   planets: IPlanet[];
   errorMessage: TNullable<string>;
 }
 
 const initialState: IState = {
-  planets: new Map(),
+  total: null,
+  planets: [],
+  next: '',
+  pageSize: null,
   isFetching: false,
   errorMessage: null,
 };
 
-export default function planets(
+export default function planetsReducer(
   state: IState = initialState,
   payload: IPayload
 ) {
@@ -29,8 +37,18 @@ export default function planets(
       return { ...state, isFetching: true };
     }
     case 'RECEIVE_PLANETS_SUCCESS': {
-      const { planets } = payload;
-      return { ...state, planets, isFetching: false };
+      const { planets, total, next } = payload;
+      const { pageSize: pageSizeState, planets: planetsState } = state;
+      const pageSize = !planets.length ? planets.length : pageSizeState;
+
+      return {
+        ...state,
+        next,
+        planets: [...planetsState, ...planets],
+        isFetching: false,
+        total,
+        pageSize,
+      };
     }
     case 'SAVE_PLANETS_ERROR': {
       const { errorMessage } = payload;
