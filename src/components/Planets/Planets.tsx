@@ -1,10 +1,11 @@
 import { useHistory } from 'react-router-dom';
 
+import EditPlanetModal from './EditPlanetModal';
 import { Grid } from '../../components';
-import { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { IPlanet, TNullable, TTableData } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPlanetsAction } from '../../actions';
+import { getPlanetsAction, savePlanetAction } from '../../actions';
 import { getIdFromLink } from '../../compositions';
 import config from '../../config.json';
 
@@ -17,6 +18,9 @@ interface IState {
 }
 
 export default function Planets() {
+  const [editingPlanetName, setEditingPlanetName] = useState<TNullable<string>>(
+    null
+  );
   const dispatch = useDispatch();
   const { next, planets, isFetching } = useSelector(
     (state: IState) => state.planets
@@ -41,6 +45,23 @@ export default function Planets() {
       action: getPlanets,
     }),
     [getPlanets, isFetching]
+  );
+
+  const handleCloseEditPlanetModal = useCallback(() => {
+    setEditingPlanetName(null);
+  }, []);
+
+  const handleSavePlanet = useCallback(
+    (planetName, data) => {
+      const currentPlanet = planets.find(({ name }) => planetName === name);
+
+      if (!currentPlanet) {
+        return;
+      }
+
+      dispatch(savePlanetAction(planetName, data));
+    },
+    [planets, dispatch]
   );
 
   const goTo = useCallback(
@@ -82,6 +103,12 @@ export default function Planets() {
           goTo(`/planets/${planetId}`);
         },
       },
+      {
+        label: 'Edit planet',
+        action: ({ name }: IPlanet) => {
+          setEditingPlanetName(name);
+        },
+      },
     ],
     [goTo]
   );
@@ -94,6 +121,11 @@ export default function Planets() {
 
   return (
     <div className="App">
+      <EditPlanetModal
+        editingPlanetName={editingPlanetName}
+        close={handleCloseEditPlanetModal}
+        onSave={handleSavePlanet}
+      />
       <Grid<IPlanet>
         header={header}
         values={planets}

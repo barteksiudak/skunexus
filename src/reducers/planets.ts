@@ -15,6 +15,8 @@ interface IPayload {
   next: TNullable<string>;
   planets: IPlanet[];
   errorMessage: TNullable<string>;
+  planetData: IPlanet;
+  planetName: string;
 }
 
 const initialState: IState = {
@@ -50,9 +52,21 @@ export default function planetsReducer(
         pageSize,
       };
     }
-    case 'SAVE_PLANETS_ERROR': {
+    case 'RECEIVE_PLANETS_ERROR': {
       const { errorMessage } = payload;
       return { ...state, isFetching: false, errorMessage };
+    }
+
+    case 'SAVE_PLANET': {
+      const { planetName, planetData } = payload;
+      const { planets: planetsState } = state;
+      const planet = planetsState.find(({ name }) => name === planetName);
+      const planetIndex = planetsState.indexOf(planet as IPlanet);
+
+      const planets = [...planetsState];
+      planets.splice(planetIndex, 1, { ...planet, ...planetData });
+
+      return { ...state, planets };
     }
 
     default:

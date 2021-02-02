@@ -6,12 +6,15 @@ import { Grid } from '../../components';
 import { http } from '../../compositions';
 import { TNullable, TTableData } from '../../types';
 
-interface IResident {
+interface IAvailableDataGrid {
   search: string;
   name: string;
 }
 
-export default function AvailableDataGrid<T>({ search, name }: IResident) {
+export default function AvailableDataGrid<T>({
+  search,
+  name,
+}: IAvailableDataGrid) {
   const [items, setItems] = useState<TNullable<T[]>>(null);
 
   const {
