@@ -236,6 +236,7 @@ export default function EditPlanetModal({
                       >
                         {options.map((option: string) => (
                           <option
+                            // defaultValue doesn't work in Reactstrap
                             selected={currentValue?.includes(option)}
                             key={option}
                             value={option}

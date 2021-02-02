@@ -4,41 +4,43 @@
     "residents": {
       "path": "/people",
       "header": [
-        "birth_year",
-        "eye_color",
-        "gender",
-        "hair_color",
-        "height",
-        "homeworld",
-        "mass",
-        "name",
-        "skin_color"
+        {"name": "birth_year", "type": "string"},
+        {"name": "eye_color", "type": "string"},
+        {"name": "gender", "type": "string"},
+        {"name": "hair_color", "type": "string"},
+        {"name": "height", "type": "number"},
+        {"name": "homeworld", "type": "string"},
+        {"name": "mass", "type": "number"},
+        {"name": "name", "type": "string"},
+        {"name": "skin_color", "type": "string"}
       ]
     },
     "films": {
       "path": "/films",
       "header": [
-        "title",
-        "episode_id",
-        "opening_crawl",
-        "director",
-        "producer",
-        "release_date",
-        "planets"
+        {"name": "title", "type": "string"},
+        {"name": "episode_id", "type": "number"},
+        {"name": "opening_crawl", "type": "string"},
+        {"name": "director", "type": "string"},
+        {"name": "producer", "type": "string"},
+        {"name": "release_date", "type": "string"},
+        {"name":  "planets", "type": "string"}
       ]
     },
     "planet": {
       "path": "/planets",
       "header": [
-        "name",
-        "rotation_period",
-        "orbital_period",
-        "diameter",
-        "climate",
-        "gravity",
-        "terrain",
-        "surface_water",
-        "population"
+        {"name": "name", "type": "string" },
+        {"name": "rotation_period", "type": "number" },
+        {"name": "orbital_period", "type": "number" },
+        {"name": "diameter", "type": "number" },
+        {"name": "climate", "type": "string" },
+        {"name": "gravity", "type": "string" },
+        {"name": "terrain", "type": "string" },
+        {"name": "surface_water", "type": " number" },
+        {"name": "population", "type": "number" },
+        {"name": "residents", "type": "array"},
+        {"name": "films", "type": "array"}
       ]
     }
   }

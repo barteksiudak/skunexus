@@ -32,10 +32,11 @@ export default function Planet({ id }: IPlanet) {
 
   return (
     <ListGroup flush>
-      {header.map((item) => {
+      {header.map(({ name, type }) => {
+        const { [name]: value } = dataList;
         return (
-          <ListGroupItem key={item}>
-            {item}: <h5>{dataList[item]}</h5>
+          <ListGroupItem key={name}>
+            {name}: <h5>{type === 'array' ? value.length : value}</h5>
           </ListGroupItem>
         );
       })}

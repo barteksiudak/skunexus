@@ -17,7 +17,7 @@ export interface IPlanet {
 
 export type TTableData = {
   GRID_CONFIG: TObject<{
-    header: string[];
+    header: TObject<string>[];
     path: string;
   }>;
 };

@@ -39,7 +39,6 @@ export default function AvailableDataGrid<T>({
 
     Promise.all(ids.map((id) => http.get(`${path}/${id}`))).then((data) => {
       const list = data.map(({ data }) => data);
-      console.log(list);
       setItems(list);
     });
   }, [search, path]);

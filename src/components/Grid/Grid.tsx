@@ -14,7 +14,7 @@ import GridFooter from './GridFooter';
 import GridCell from './GridCell';
 
 interface IGrid<T> {
-  header: string[];
+  header: TObject<string>[];
   values: T[];
   actions?: {
     label: string;
@@ -42,7 +42,7 @@ export default function Grid<T>({
       <Table>
         <thead>
           <tr>
-            {header.map((colName) => (
+            {header.map(({ name: colName }) => (
               <th key={colName}>{colName}</th>
             ))}
             {!!actions.length && <th>Actions</th>}
@@ -51,13 +51,14 @@ export default function Grid<T>({
         <tbody>
           {values.map((row, index) => (
             <tr key={index} className="grid-row">
-              {header.map((columnName) => {
+              {header.map(({ name: columnName, type }) => {
                 const currentRow = (row as unknown) as TObject<string>;
                 return (
                   <GridCell
                     key={columnName}
                     columnName={columnName}
                     row={currentRow}
+                    type={type}
                   />
                 );
               })}

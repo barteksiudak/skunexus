@@ -7,6 +7,9 @@
 .table td.grid-cell {
   vertical-align: middle;
 }
+.table td.grid-cell.align-right {
+  text-align: right;
+}
 .grid-buttons {
   display: flex;
   flex-direction: column;
