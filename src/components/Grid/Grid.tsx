@@ -1,5 +1,12 @@
-import React from 'react';
-import { Table, Button, NavLink } from 'reactstrap';
+import React, { useCallback } from 'react';
+import {
+  Table,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  NavLink,
+} from 'reactstrap';
 
 import { TNullable, TObject } from '../../types';
 import './Grid.css';
@@ -28,6 +35,8 @@ export default function Grid<T>({
 }: IGrid<T>) {
   const { label: footerLabel, action: footerAction, isFetching } = footer || {};
 
+  const handleActionClick = useCallback((action, row) => () => action(row), []);
+
   return (
     <div className={`grid-container ${footer ? 'has-footer' : ''}`}>
       <Table>
@@ -54,19 +63,18 @@ export default function Grid<T>({
               })}
               {!!actions.length && (
                 <td className="grid-cell">
-                  <div className="grid-buttons">
-                    {actions.map(({ label, action }) => (
-                      <Button
-                        key={label}
-                        color="primary"
-                        onClick={() => action(row)}
-                        size="sm"
-                        className="grid-button"
-                      >
-                        {label}
-                      </Button>
-                    ))}
-                  </div>
+                  <UncontrolledDropdown direction="left">
+                    <DropdownToggle caret>Actions</DropdownToggle>
+                    <DropdownMenu>
+                      {actions.map(({ label, action }) => (
+                        <DropdownItem key={label} header>
+                          <NavLink onClick={handleActionClick(action, row)}>
+                            {label}
+                          </NavLink>
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
                 </td>
               )}
             </tr>

@@ -26,6 +26,20 @@
         "release_date",
         "planets"
       ]
+    },
+    "planet": {
+      "path": "/planets",
+      "header": [
+        "name",
+        "rotation_period",
+        "orbital_period",
+        "diameter",
+        "climate",
+        "gravity",
+        "terrain",
+        "surface_water",
+        "population"
+      ]
     }
   }
 }

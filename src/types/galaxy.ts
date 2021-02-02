@@ -12,6 +12,7 @@ export interface IPlanet {
   population: string;
   residents: string[];
   films: string[];
+  url: string;
 }
 
 export interface IResident {

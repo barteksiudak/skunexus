@@ -2,22 +2,11 @@ import { useHistory } from 'react-router-dom';
 
 import { Grid } from '../../components';
 import { useCallback, useEffect, useMemo } from 'react';
-import { IPlanet, TNullable } from '../../types';
+import { IPlanet, TNullable, TTableData } from '../../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPlanetsAction } from '../../actions';
 import { getIdFromLink } from '../../compositions';
-
-const HEADER = [
-  'name',
-  'rotation_period',
-  'orbital_period',
-  'diameter',
-  'climate',
-  'gravity',
-  'terrain',
-  'surface_water',
-  'population',
-];
+import config from '../../config.json';
 
 interface IState {
   planets: {
@@ -55,7 +44,14 @@ export default function Planets() {
   );
 
   const goTo = useCallback(
-    (pathname: string, links: string[]) => {
+    (pathname: string, links?: string[]) => {
+      if (!links) {
+        history.push({
+          pathname,
+        });
+        return;
+      }
+
       const ids = links.map(getIdFromLink).filter(Boolean);
       history.push({
         pathname,
@@ -79,14 +75,27 @@ export default function Planets() {
           goTo('/residents', residents);
         },
       },
+      {
+        label: 'Show details',
+        action: ({ url }: IPlanet) => {
+          const planetId = getIdFromLink(url);
+          goTo(`/planets/${planetId}`);
+        },
+      },
     ],
     [goTo]
   );
 
+  const {
+    GRID_CONFIG: {
+      planet: { header },
+    },
+  } = (config as unknown) as TTableData;
+
   return (
     <div className="App">
       <Grid<IPlanet>
-        header={HEADER}
+        header={header}
         values={planets}
         actions={ACTIONS}
         footer={next !== null ? footerProps : null}

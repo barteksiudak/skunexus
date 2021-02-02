@@ -1,6 +1,6 @@
 import { History } from 'history';
 import { useParams } from 'react-router-dom';
-import { Planets as PlanetsComponent } from '../../components';
+import { Planets as PlanetsComponent, Planet } from '../../components';
 
 interface IPlanets {
   history: History;
@@ -13,5 +13,5 @@ export default function Planets({ history }: IPlanets) {
     return <PlanetsComponent />;
   }
 
-  return <PlanetsComponent />;
+  return <Planet id={id} />;
 }
