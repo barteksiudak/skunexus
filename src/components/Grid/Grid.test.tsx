@@ -1,18 +1,18 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { Button, Table } from 'reactstrap';
+import { mount } from 'enzyme';
+import { NavLink, Table } from 'reactstrap';
 
 import Grid from './Grid';
 import { TObject } from '../../types';
 
 describe('Grid', () => {
   const getWrapper = (props?: {
-    header: string[];
+    header: { name: string }[];
     values: TObject<string>[];
     actions?: any[];
   }) => {
     const { header = [], values = [], actions = [] } = props || {};
-    return shallow(
+    return mount(
       <Grid<TObject<string>>
         header={header}
         values={values}
@@ -21,7 +21,7 @@ describe('Grid', () => {
     );
   };
 
-  const headerMock: string[] = ['first', 'second', 'third'];
+  const headerMock = [{ name: 'first' }, { name: 'second' }, { name: 'third' }];
   const rowsMock = [
     { first: 'first cell' },
     { second: 'second cell' },
@@ -49,7 +49,7 @@ describe('Grid', () => {
       actions,
     });
 
-    wrapper.find(Button).first().simulate('click', 'test');
+    wrapper.find(NavLink).first().simulate('click', 'test');
 
     expect(firstAction).toHaveBeenCalledWith(firstMock);
   });
